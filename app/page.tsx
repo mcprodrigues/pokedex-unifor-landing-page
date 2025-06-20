@@ -7,6 +7,7 @@ import MetricsSection from '@/components/sections/MetricsSection';
 import DatasetAndStacksSection from '@/components/sections/DatasetAndStacksSection';
 import DownloadSection from '@/components/sections/DownloadSection';
 import Footer from '@/components/layout/Footer';
+import ImageUploader from '@/components/sections/RequestExampleSection';
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <MetricsSection />
       <DatasetAndStacksSection />
       <DownloadSection />
+      <ImageUploader />
 
       <Footer />
     </main>
