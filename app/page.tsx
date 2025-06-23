@@ -8,6 +8,7 @@ import DatasetAndStacksSection from '@/components/sections/DatasetAndStacksSecti
 import DownloadSection from '@/components/sections/DownloadSection';
 import Footer from '@/components/layout/Footer';
 import ImageUploader from '@/components/sections/RequestExampleSection';
+import Pokedex from '@/components/sections/Pokedex';
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <HowItWorksSection />
       <MetricsSection />
       <DatasetAndStacksSection />
+      <Pokedex/>
       <DownloadSection />
       <ImageUploader />
 

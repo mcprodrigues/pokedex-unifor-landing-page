@@ -5,7 +5,6 @@ export default function DatasetAndStacksSection() {
     <section className="w-full bg-white mt-[-4rem] md:mt-[-6rem] pt-32 sm:pt-16 md:pt-32 lg:pt-40 pb-20 px-4 sm:px-8 md:px-16 lg:px-40 xl:px-40">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          Title
           <h2 className="text-2xl max-w-[500px] md:text-3xl font-sans font-semibold mb-4">
             Sobre o Dataset
           </h2>
