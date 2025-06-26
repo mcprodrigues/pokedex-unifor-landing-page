@@ -23,7 +23,6 @@ export default function Home() {
       <DatasetAndStacksSection />
       <Pokedex/>
       <DownloadSection />
-      <ImageUploader />
 
       <Footer />
     </main>

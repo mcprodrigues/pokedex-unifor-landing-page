@@ -3,10 +3,40 @@
 import { Upload } from 'lucide-react';
 import { useState } from 'react';
 
+// Mapeamento de nomes em inglês/técnicos para português
+const nameTranslations: Record<string, string> = {
+  gamba: 'Gambá',
+  lagarto: 'Lagarto',
+  pavao: 'Pavão',
+  ema: 'Ema',
+  pombo: 'Pombo',
+  cabra: 'Cabra',
+  cavalo: 'Cavalo',
+  gato: 'Gato',
+  iguana: 'Iguana',
+  vaca: 'Vaca',
+  cat: 'Gato',
+  horse: 'Cavalo',
+  cow: 'Vaca',
+  goat: 'Cabra',
+  lizard: 'Lagarto',
+  pigeon: 'Pombo',
+  peacock: 'Pavão',
+  opossum: 'Gambá',
+  ostrich: 'Ema',
+
+};
+
 export default function Pokedex() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [identifiedAnimal, setIdentifiedAnimal] = useState<string>('');
   const [confidence, setConfidence] = useState<number | null>(null);
+
+  const formatAnimalName = (name: string): string => {
+    if (!name || typeof name !== 'string') return 'Desconhecido';
+    const key = name.toLowerCase().replace(/_/g, '');
+    return nameTranslations[key] || name.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -23,7 +53,7 @@ export default function Pokedex() {
     formData.append('file', selectedFile);
 
     try {
-      const res = await fetch('http://127.0.0.1:5000/prediction', {
+      const res = await fetch('https://classificationmodel-production.up.railway.app/prediction', {
         method: 'POST',
         body: formData,
       });
@@ -41,8 +71,16 @@ export default function Pokedex() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center">
-      <div className="transform scale-[1.5] origin-top w-[456px] h-[342px] max-w-full flex rounded-lg border border-black">
+    <div className=' bg-white flex-1'>
+      <div className="max-w-3xl pl-44 w-full text-left ">
+        <h2 className="text-2xl max-w-[500px] md:text-3xl font-sans font-semibold mb-4">
+          Descubra o animal da sua foto
+        </h2>
+        <p className="max-w-[550px] text-sm md:text-base text-neutral-700 mb-12">
+Envie uma imagem e veja qual espécie nosso modelo IA  encontra!        </p>
+      </div>
+    <div className=" bg-white pt-8 flex flex-col pb-20  mb-20 sm:px-8 md:px-16 lg:px-56 xl:px-40 gap-6 items-start">
+<div className="w-full max-w-[456px] aspect-[4/3] flex rounded-lg border border-black scale-100 md:scale-[1.1] lg:scale-[1.25] xl:scale-[1.5] transition-transform">
         {/* LEFT PANEL */}
         <div className="w-1/2 bg-[#fe0065] grid grid-rows-[23%_50%_27%] border-r-2 border-black rounded-l-lg">
           {/* Top Lights */}
@@ -81,14 +119,18 @@ export default function Pokedex() {
                   <div className="w-[5px] h-[5px] rounded-full border border-black bg-red-500" />
                   <div className="w-[5px] h-[5px] rounded-full border border-black bg-red-500" />
                 </div>
-                <div
-                  className="w-[80%] h-full bg-[#98cb98] border-2 border-black rounded-md mx-auto bg-center bg-no-repeat bg-contain flex items-center justify-center"
-                  style={{
-                    backgroundImage: selectedFile ? `url(${URL.createObjectURL(selectedFile)})` : 'none',
-                  }}
-                >
-                  {!selectedFile && <Upload className="w-10 h-10 text-black" />}
-                </div>
+<div className="w-[80%] h-full border-2 border-black rounded-md mx-auto bg-[#98cb98] flex items-center justify-center overflow-hidden">
+  {selectedFile ? (
+    <img
+      src={URL.createObjectURL(selectedFile)}
+      alt="Imagem selecionada"
+      className="w-full h-full object-cover"
+    />
+  ) : (
+    <Upload className="w-10 h-10 text-black" />
+  )}
+</div>
+
                 <div className="flex justify-between items-center px-2 mt-1">
                   <div className="w-[12px] h-[12px] rounded-full border-2 border-black bg-[#ff0000]">
                     <div className="w-[4px] h-[4px] bg-[#fe98cb] rounded-full relative top-[2px] left-[2px]" />
@@ -104,18 +146,17 @@ export default function Pokedex() {
             </label>
             <button
               onClick={handleUpload}
-              className="w-[130px] h-[250px] border-2 border-black bg-[#3298cb] rounded-md flex justify-center font-sans items-center text-[12px] text-white  font-press text-center"
+              className="w-[130px] h-[250px] border-2 border-black bg-[#3298cb] rounded-md flex justify-center font-sans items-center text-[12px] text-white font-press text-center"
             >
               {selectedFile ? 'Enviar imagem' : ' '}
             </button>
           </div>
 
-          {/* Bottom Buttons (resumido) */}
+          {/* Bottom buttons */}
           <div className="flex flex-col justify-center items-start px-2">
             <div className="flex items-start space-x-2">
               <div className="w-[25px] h-[25px] rounded-full border-2 border-black bg-[#585858]" />
-              <div className="flex space-x-2 ml-2">
-              </div>
+              <div className="flex space-x-2 ml-2"></div>
             </div>
             <div className="flex justify-between items-center mt-4 w-full">
               <div className="text-2xl flex space-x-1 justify-center w-1/3">
@@ -123,7 +164,9 @@ export default function Pokedex() {
                 <div>.</div>
               </div>
               <div className="w-[80px] h-[30px] border-2 border-black bg-[#3ab47d] rounded-md flex justify-center items-center">
-                <span className="text-[8.5px] font-press text-center w-full truncate">{identifiedAnimal}</span>
+                <span className="text-[8.5px] font-press text-center w-full truncate">
+                  {formatAnimalName(identifiedAnimal)}
+                </span>
               </div>
               <div className="w-1/3 flex justify-center items-center">
                 <div className="relative w-[52px] h-[52px] flex items-center justify-center">
@@ -139,12 +182,14 @@ export default function Pokedex() {
           </div>
         </div>
 
+        {/* RIGHT PANEL */}
         <div className="w-1/2 bg-[#fe0065] flex flex-col gap-10 justify-center items-center border-l-2 border-black rounded-r-lg py-4 relative">
           <div className="absolute -left-[3px] bottom-0 w-full h-[265px] border-r-2 border-black rounded-br-md" />
           <div className="w-[146px] h-[64px] bg-[#9e9d9d] border-2 border-black rounded px-2 text-[10px] font-press flex items-center justify-center text-center leading-[2]">
             {confidence !== null ? (
               <span>
-                Confiança: {confidence * 100}%<br />Animal: {identifiedAnimal}
+                Confiança: {confidence * 100}%<br />
+                Animal: {formatAnimalName(identifiedAnimal)}
               </span>
             ) : (
               'Envie uma imagem'
@@ -184,6 +229,7 @@ export default function Pokedex() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
